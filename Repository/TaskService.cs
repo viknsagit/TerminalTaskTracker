@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Collections;
+using Microsoft.EntityFrameworkCore;
 using TerminalTaskTracker.Models;
 using Task = System.Threading.Tasks.Task;
 
@@ -42,5 +43,15 @@ public class TaskService (TaskRepository repository)
             Where(p => p.ProjectName == projectName)
             .FirstOrDefaultAsync();
         return project?.ProjectId;
+    }
+
+    public async Task<List<Project>> GetAllProjectsAsync()
+    {
+        return await repository.Projects.ToListAsync();
+    }
+
+    public async Task<int> GetTasksCountByProjectIdAsync(int projectId)
+    {
+        return await repository.Tasks.Where(x => x.Project.ProjectId == projectId).CountAsync();
     }
 }

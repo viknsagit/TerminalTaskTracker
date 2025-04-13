@@ -11,6 +11,6 @@ public class TaskRepository : DbContext
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite("Data Source=tasktracker.db");
+        optionsBuilder.UseSqlite("Data Source=./tasktracker.db");
     }
 }

@@ -23,10 +23,6 @@ var command = AnsiConsole.Prompt(
 
 switch (command)
 {
-    case "Exit": 
-        Environment.Exit(0);
-    break;
-    
     case "Add Task":
     {
         var taskName = AnsiConsole.Ask<string>("Enter the task name:");
@@ -69,8 +65,33 @@ switch (command)
 
     case "View Projects":
     {
+        var projects = await taskService.GetAllProjectsAsync();
+        var table = new Table();
+        table.Border(TableBorder.Rounded);
+        table.Expand();
+        table.Title("[bold yellow]Projects list[/]");
         
+        table.AddColumn(new TableColumn("[blue]ID[/]").Centered());
+        table.AddColumn(new TableColumn("[green]Project name[/]"));
+        table.AddColumn(new TableColumn("[purple]Description[/]"));
+        table.AddColumn(new TableColumn("[red]Tasks count[/]").Centered());
+        
+        foreach (var project in projects)
+        {
+            var tasksCount = await taskService.GetTasksCountByProjectIdAsync(project.ProjectId);
+            table.AddRow(
+                $"[blue]{project.ProjectId}[/]", 
+                $"[green]{project.ProjectName}[/]", 
+                project.ProjectDescription?.Length > 0 ? project.ProjectDescription : "[grey](empty)[/]", 
+                tasksCount > 0 ? $"[red]{tasksCount}[/]" : "[grey]0[/]"
+            );
+        }
+        AnsiConsole.Write(table);
     }
+        break;
+    
+    case "Exit": 
+        Environment.Exit(0);
         break;
     
 }
