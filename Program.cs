@@ -31,7 +31,7 @@ switch (command)
     case "Add Task":
     {
         var taskName = AnsiConsole.Ask<string>("Enter the task name:");
-        var taskDescription = AnsiConsole.Ask<string>("Enter the task description (Can be null):",string.Empty);
+        var taskDescription = AnsiConsole.Ask<string>("Enter the task description:",string.Empty);
         var projectId = AnsiConsole.Prompt(new TextPrompt<int>("Enter the project id:").Validate(id =>
         {
             var project = taskService.GetProjectByIdAsync(id).Result;
@@ -56,7 +56,8 @@ switch (command)
                 var nameExits = taskService.ProjectWithNameExistAsync(name).Result;
                 return nameExits ? ValidationResult.Error("[bold red]Project with this name already exists![/]") : ValidationResult.Success();
             }));
-        var projectDescription = AnsiConsole.Ask("Enter the project description (Can be null):",string.Empty);
+        
+        var projectDescription = AnsiConsole.Ask("Enter the project description:",string.Empty);
         await taskService.AddNewProjectAsync(new Project()
         {
             ProjectName = projectName,
