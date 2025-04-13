@@ -17,8 +17,7 @@ var command = AnsiConsole.Prompt(
         .PageSize(10)
         .MoreChoicesText("[grey](Move up and down to reveal more commands)[/]")
         .AddChoices(new[] {
-            "Add Task", "View Task", "Delete Task","Move Task",
-            "Add Project", "View Project", "Delete Project",
+            "Add Task", "Add Project", "View Projects", "Delete Project",
             "Settings", "Exit"
         }));
 
@@ -67,6 +66,13 @@ switch (command)
         AnsiConsole.MarkupLine($"[bold green]Project added successfully with ID: {projectId}[/]");
     }
         break;
+
+    case "View Projects":
+    {
+        
+    }
+        break;
+    
 }
 
 
