@@ -17,6 +17,8 @@ public class Task
     
     public string? Description { get; set; }
     
+    public bool IsCompleted { get; set; }
+    
     [Required]
     public long TaskCreateTime { get; private set; } = DateTimeOffset.Now.ToUnixTimeSeconds();
     

@@ -43,6 +43,9 @@ namespace TerminalTaskTracker.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int?>("ProjectId")
                         .HasColumnType("INTEGER");
 

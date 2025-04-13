@@ -44,14 +44,7 @@ switch (command)
             Title = taskName,
             Description = taskDescription,
         });
-
-
-
-
-
-
-
-
+        AnsiConsole.MarkupLine("[bold green]Task added to project list![/]");
     }
         break;
 
