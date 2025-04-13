@@ -22,6 +22,9 @@ namespace TerminalTaskTracker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ProjectDescription")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("ProjectName")
                         .IsRequired()
                         .HasColumnType("TEXT");

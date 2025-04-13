@@ -1,10 +1,13 @@
 ﻿using Spectre.Console;
+using TerminalTaskTracker.Models;
 using TerminalTaskTracker.Repository;
+using Task = TerminalTaskTracker.Models.Task;
+
 TaskService taskService = new(new TaskRepository());
 
 AnsiConsole.Write(
     new FigletText("Terminal Task Tracker")
-        .LeftJustified()
+        .Centered()
         .Color(Color.Red));
 AnsiConsole.MarkupLine("[bold green]Welcome to the Terminal Task Tracker![/]");
 
@@ -21,18 +24,55 @@ var command = AnsiConsole.Prompt(
 
 switch (command)
 {
+    case "Exit": 
+        Environment.Exit(0);
+    break;
+    
     case "Add Task":
     {
         var taskName = AnsiConsole.Ask<string>("Enter the task name:");
-        var taskDescription = AnsiConsole.Ask<string>("Enter the task description (Can be null):");
+        var taskDescription = AnsiConsole.Ask<string>("Enter the task description (Can be null):",string.Empty);
         var projectId = AnsiConsole.Prompt(new TextPrompt<int>("Enter the project id:").Validate(id =>
         {
             var project = taskService.GetProjectByIdAsync(id).Result;
-            return project is null ? ValidationResult.Error("Project not found") : ValidationResult.Success();
+            return project is null ? ValidationResult.Error("[bold red]Project not found![/]") : ValidationResult.Success();
         }));
         var project = await taskService.GetProjectByIdAsync(projectId);
+        await taskService.AddNewTaskAsync(new Task()
+        {
+            Project = project,
+            Title = taskName,
+            Description = taskDescription,
+        });
+
+
+
+
+
+
+
+
     }
-    break;
+        break;
+
+    case "Add Project":
+    {
+        var projectName = AnsiConsole.Prompt(new TextPrompt<string>("Enter the project name:")
+            .Validate(name =>
+            {
+                var nameExits = taskService.ProjectWithNameExistAsync(name).Result;
+                return nameExits ? ValidationResult.Error("[bold red]Project with this name already exists![/]") : ValidationResult.Success();
+            }));
+        var projectDescription = AnsiConsole.Ask("Enter the project description (Can be null):",string.Empty);
+        await taskService.AddNewProjectAsync(new Project()
+        {
+            ProjectName = projectName,
+            ProjectDescription = projectDescription
+        });
+        var projectId = await taskService.GetProjectIdAsync(projectName);
+        AnsiConsole.MarkupLine($"[bold green]Project added successfully with ID: {projectId}[/]");
+    }
+        break;
 }
 
 

@@ -18,7 +18,7 @@ public class Task
     public string? Description { get; set; }
     
     [Required]
-    public long TaskCreateTime { get; set; }
+    public long TaskCreateTime { get; private set; } = DateTimeOffset.Now.ToUnixTimeSeconds();
     
     public List<TaskTimePart> TaskTimeParts { get; set; } = [];
 }

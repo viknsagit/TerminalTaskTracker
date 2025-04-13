@@ -1,4 +1,5 @@
-﻿using TerminalTaskTracker.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using TerminalTaskTracker.Models;
 using Task = System.Threading.Tasks.Task;
 
 namespace TerminalTaskTracker.Repository;
@@ -9,7 +10,15 @@ public class TaskService (TaskRepository repository)
     {
         await repository.Tasks.AddAsync(task);
         await repository.SaveChangesAsync();
-    } 
+    }
+
+    public async Task<bool> ProjectWithNameExistAsync(string projectName)
+    {
+        var project = await repository.Projects
+            .Where(p => p.ProjectName == projectName)
+            .FirstOrDefaultAsync();
+        return project != null;
+    }
 
     public async Task AddNewProjectAsync(Project project)
     {
@@ -25,5 +34,13 @@ public class TaskService (TaskRepository repository)
     public async Task<Project?> GetProjectByIdAsync(int id)
     {
         return await repository.Projects.FindAsync(id);
+    }
+
+    public async Task<int?> GetProjectIdAsync(string projectName)
+    {
+        var project = await repository.Projects.
+            Where(p => p.ProjectName == projectName)
+            .FirstOrDefaultAsync();
+        return project?.ProjectId;
     }
 }
